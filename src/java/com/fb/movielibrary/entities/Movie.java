@@ -3,15 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.fb.movielibrary.entities;
 
 import java.io.Serializable;
+import java.util.concurrent.TimeUnit;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -23,17 +24,24 @@ import javax.validation.constraints.Size;
 @Table(name = "MOVIE")
 public class Movie implements Serializable
 {
+
     private static final long serialVersionUID = 1L;
-    
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @NotNull
     private Long id;
 
     @NotNull
-    @Size(min=1, max=50)
+    @Size(min = 1, max = 200)
     private String title;
-    
+
+    private Integer movieYear;
+
+    private Integer runtime;
+
+    @Transient
+    private String formattedRuntime;
+
     public Long getId()
     {
         return id;
@@ -53,7 +61,38 @@ public class Movie implements Serializable
     {
         this.title = title;
     }
-    
+
+    public Integer getMovieYear()
+    {
+        return movieYear;
+    }
+
+    public void setMovieYear(Integer movieYear)
+    {
+        this.movieYear = movieYear;
+    }
+
+    public Integer getRuntime()
+    {
+        return runtime;
+    }
+
+    public void setRuntime(Integer runtime)
+    {
+        this.runtime = runtime;
+        this.formattedRuntime = null;
+    }
+
+    public String getFormattedRuntime()
+    {
+        if(formattedRuntime == null)
+        {
+            this.formattedRuntime = String.format("%02d:%02d", TimeUnit.MINUTES.toHours(runtime), runtime
+                - TimeUnit.HOURS.toMinutes(TimeUnit.MINUTES.toHours(runtime)));
+        }
+        return formattedRuntime;
+    }
+
     @Override
     public int hashCode()
     {
@@ -77,5 +116,5 @@ public class Movie implements Serializable
     {
         return this.title;
     }
-    
+
 }

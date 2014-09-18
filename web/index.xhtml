@@ -2,14 +2,41 @@
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="./WEB-INF/template.xhtml"
-                xmlns:h="http://xmlns.jcp.org/jsf/html">
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="content">
-        <h:dataTable value="#{moviesController.movies}" var="movie" >
-            <h:column>
-                <h:outputText value="#{movie.title}" />
-            </h:column>
-        </h:dataTable>
+        <h:form>
+            <h:panelGrid columns="1" >
+                <h:commandButton value="#{lbl.find_movies}" action="findmovies"/>
+            </h:panelGrid>
+            
+            <br/>
+            
+            <h:dataTable value="#{moviesController.movies}" var="movie">
+                <h:column>
+                    <f:facet name="header">#{lbl.id}</f:facet>
+                    <h:outputText value="#{movie.id}" style="padding: 10px;"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">#{lbl.title}</f:facet>
+                    <h:outputText value="#{movie.title}" style="padding: 10px;"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">#{lbl.year}</f:facet>
+                    <h:outputText value="#{movie.movieYear}" style="padding: 10px;" rendered="#{movie.movieYear > 0}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">#{lbl.runtime}</f:facet>
+                    <h:outputText value="#{movie.formattedRuntime}" style="padding: 10px;" rendered="#{movie.runtime > 0}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">#{lbl.remove}</f:facet>
+                    <h:commandButton value="-" action="#{moviesController.delete(movie)}"/>
+                </h:column>
+            </h:dataTable>
+        </h:form>
     </ui:define>
 
 </ui:composition>

@@ -35,4 +35,9 @@ public class MoviesController
     {
         return moviesBean.getMovies();
     }
+    
+    public void delete(final Movie movie)
+    {
+        moviesBean.delete(movie.getId());
+    }
 }

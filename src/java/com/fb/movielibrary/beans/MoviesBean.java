@@ -27,5 +27,28 @@ public class MoviesBean
         return em.createQuery("select m from Movie m order by m.title", Movie.class).getResultList();
     }
 
+    public Movie save(final Movie movie)
+    {
+        em.persist(movie);
+        em.flush();
+        em.refresh(movie);
+        return movie;
+    }
+    
+    public Movie find(final Long id)
+    {
+        return em.find(Movie.class, id);
+    }
+    
+    public void delete(final Long id)
+    {
+        Movie movie = em.getReference(Movie.class, id);
+        em.remove(movie);
+    }
+    
+    public boolean isFavorite(final Movie movie)
+    {
+        return find(movie.getId()) != null;
+    }
     
 }

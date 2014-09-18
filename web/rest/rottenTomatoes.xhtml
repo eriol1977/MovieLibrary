@@ -8,16 +8,40 @@
 
     <ui:define name="content">
         <h:form prependId="false">
-            <h:panelGrid columns="2" >
+            <h:panelGrid columns="4" >
+                <h:outputLabel value="#{lbl.title}: "/>
                 <h:inputText id="inputTitle" value="#{restClient.title}" />
-                <h:commandButton id="loadingButton" value="GET">
+                <h:commandButton id="loadingButton" value="#{lbl.find_movies}">
                     <f:ajax execute="inputTitle" render="loadedContent" onevent="monitor" />
                 </h:commandButton>
+                <h:commandButton value="#{lbl.favorites}" action="favorites"/>
             </h:panelGrid>
 
             <br/>
             
-            <h:outputText id="loadedContent" value="#{restClient.movie}" />
+            <h:dataTable id="loadedContent" value="#{restClient.movies}" var="movie">
+                <h:column>
+                    <f:facet name="header">#{lbl.id}</f:facet>
+                    <h:outputText value="#{movie.id}" style="padding: 10px;"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">#{lbl.title}</f:facet>
+                    <h:outputText value="#{movie.title}" style="padding: 10px;"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">#{lbl.year}</f:facet>
+                    <h:outputText value="#{movie.movieYear}" style="padding: 10px;" rendered="#{movie.movieYear > 0}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">#{lbl.runtime}</f:facet>
+                    <h:outputText value="#{movie.formattedRuntime}" style="padding: 10px;" rendered="#{movie.runtime > 0}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">#{lbl.save}</f:facet>
+                    <h:commandButton value="+" action="#{restClient.save(movie)}" rendered="#{not restClient.isFavorite(movie)}"/>
+                </h:column>
+            </h:dataTable>
+            
             <h:outputText id="loading" value="#{lbl.loading}" style="display:none;" />
 
         </h:form>
