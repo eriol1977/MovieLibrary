@@ -10,6 +10,7 @@
       <property name="javax.persistence.schema-generation.drop-source" value="script"/>
       <property name="javax.persistence.schema-generation.create-script-source" value="com/fb/movielibrary/resources/create.sql"/>
       <property name="javax.persistence.schema-generation.drop-script-source" value="com/fb/movielibrary/resources/drop.sql"/>
+      <property name="javax.persistence.sql-load-script-source" value="com/fb/movielibrary/resources/load.sql"/>
       <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLInnoDBDialect"/>
     </properties>
   </persistence-unit>

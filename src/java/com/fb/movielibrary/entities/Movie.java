@@ -8,8 +8,6 @@ package com.fb.movielibrary.entities;
 import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -38,6 +36,8 @@ public class Movie implements Serializable
     private Integer movieYear;
 
     private Integer runtime;
+
+    private String synopsis;
 
     @Transient
     private String formattedRuntime;
@@ -85,12 +85,28 @@ public class Movie implements Serializable
 
     public String getFormattedRuntime()
     {
-        if(formattedRuntime == null)
-        {
+        if (formattedRuntime == null) {
             this.formattedRuntime = String.format("%02d:%02d", TimeUnit.MINUTES.toHours(runtime), runtime
-                - TimeUnit.HOURS.toMinutes(TimeUnit.MINUTES.toHours(runtime)));
+                    - TimeUnit.HOURS.toMinutes(TimeUnit.MINUTES.toHours(runtime)));
         }
         return formattedRuntime;
+    }
+
+    public String getSynopsis()
+    {
+        if(synopsis == null || synopsis.isEmpty())
+        {
+            return "This movie has no description.";
+        }
+        return synopsis;
+    }
+
+    public void setSynopsis(String synopsis)
+    {
+        this.synopsis = synopsis;
+        if (this.synopsis.length() > 3000) {
+            this.synopsis = this.synopsis.substring(0, 3000);
+        }
     }
 
     @Override

@@ -77,6 +77,10 @@ public class MovieReader implements MessageBodyReader<List<Movie>>
                                 } else {
                                     movie.setRuntime(0);
                                 }
+                                break;
+                            case "synopsis":
+                                parser.next();
+                                movie.setSynopsis(parser.getString());
                                 movies.add(movie);
                                 break;
                         }

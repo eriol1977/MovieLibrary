@@ -6,23 +6,28 @@
 
 package com.fb.movielibrary.controllers;
 
-import com.fb.movielibrary.beans.MoviesBean;
+import com.fb.movielibrary.beans.AuxiliaryBean;
 import com.fb.movielibrary.entities.Movie;
-import java.util.List;
+import java.io.Serializable;
 import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
+import org.primefaces.model.LazyDataModel;
 
 /**
  *
  * @author Francesco
  */
 @Named(value = "moviesController")
-@RequestScoped
-public class MoviesController
+@ViewScoped
+public class MoviesController implements Serializable
 {
     @Inject
-    MoviesBean moviesBean;
+    private AuxiliaryBean bean;
+    
+    private LazyDataModel<Movie> lazyDataModel;
+    
+    private Movie selectedMovie;
     
     /**
      * Creates a new instance of MoviesController
@@ -30,14 +35,25 @@ public class MoviesController
     public MoviesController()
     {
     }
-    
-    public List<Movie> getMovies()
+
+    public LazyDataModel<Movie> getLazyDataModel()
     {
-        return moviesBean.getMovies();
+        if(lazyDataModel == null)
+        {
+            lazyDataModel = new QueryDataModel<>(bean, Movie.class);
+        }
+        return lazyDataModel;
+    }
+
+    public Movie getSelectedMovie()
+    {
+        return selectedMovie;
+    }
+
+    public void setSelectedMovie(Movie selectedMovie)
+    {
+        this.selectedMovie = selectedMovie;
     }
     
-    public void delete(final Movie movie)
-    {
-        moviesBean.delete(movie.getId());
-    }
+    
 }

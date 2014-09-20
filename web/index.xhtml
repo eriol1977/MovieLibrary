@@ -3,6 +3,7 @@
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="./WEB-INF/template.xhtml"
                 xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:p="http://primefaces.org/ui"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
@@ -11,31 +12,35 @@
             <h:panelGrid columns="1" >
                 <h:commandButton value="#{lbl.find_movies}" action="findmovies"/>
             </h:panelGrid>
-            
+
             <br/>
             
-            <h:dataTable value="#{moviesController.movies}" var="movie">
-                <h:column>
-                    <f:facet name="header">#{lbl.id}</f:facet>
+            <p:dataTable value="#{moviesController.lazyDataModel}" var="movie" paginator="true" rows="15" lazy="true" 
+                         scrollable="true" scrollHeight="400" stickyHeader="true"
+                         selectionMode="single" selection="#{moviesController.selectedMovie}" rowKey="#{movie.id}">
+                <p:ajax event="rowSelect" update="sel" />
+                <p:column>
+                    <p:rowToggler />
+                </p:column>
+                <p:column sortBy="#{movie.id}" headerText="#{lbl.id}">
                     <h:outputText value="#{movie.id}" style="padding: 10px;"/>
-                </h:column>
-                <h:column>
-                    <f:facet name="header">#{lbl.title}</f:facet>
+                </p:column>
+                <p:column sortBy="#{movie.title}" headerText="#{lbl.title}">
                     <h:outputText value="#{movie.title}" style="padding: 10px;"/>
-                </h:column>
-                <h:column>
-                    <f:facet name="header">#{lbl.year}</f:facet>
+                </p:column>
+                <p:column sortBy="#{movie.movieYear}" headerText="#{lbl.year}">
                     <h:outputText value="#{movie.movieYear}" style="padding: 10px;" rendered="#{movie.movieYear > 0}"/>
-                </h:column>
-                <h:column>
-                    <f:facet name="header">#{lbl.runtime}</f:facet>
+                </p:column>
+                <p:column sortBy="#{movie.runtime}" headerText="#{lbl.runtime}">
                     <h:outputText value="#{movie.formattedRuntime}" style="padding: 10px;" rendered="#{movie.runtime > 0}"/>
-                </h:column>
-                <h:column>
-                    <f:facet name="header">#{lbl.remove}</f:facet>
-                    <h:commandButton value="-" action="#{moviesController.delete(movie)}"/>
-                </h:column>
-            </h:dataTable>
+                </p:column>
+                <f:facet name="footer">
+                    <h:outputText id="sel" value="#{lbl.enjoy}&nbsp;#{moviesController.selectedMovie.title}" />
+                </f:facet>
+                <p:rowExpansion>
+                    <h:outputText value="#{movie.synopsis}" />
+                </p:rowExpansion>
+            </p:dataTable>
         </h:form>
     </ui:define>
 
